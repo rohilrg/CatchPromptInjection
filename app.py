@@ -1,6 +1,5 @@
 import streamlit as st
-import random
-import time
+
 from src.detector import PromptInjectionDetector
 
 # download model
@@ -10,7 +9,9 @@ st.title("Joke Maker")
 # Initialize chat history
 # Store LLM generated responses
 if "messages" not in st.session_state.keys():
-    st.session_state.messages = [{"role": "assistant", "content": "How may I help you?"}]
+    st.session_state.messages = [
+        {"role": "assistant", "content": "Ask me to crack a joke about.."}
+    ]
 
 # Display chat messages from history on app rerun
 for message in st.session_state.messages:
@@ -29,13 +30,12 @@ if prompt := st.chat_input("Tell me a joke about..."):
 if st.session_state.messages[-1]["role"] != "assistant":
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
-            response = model.process_query(request={"query":prompt})
-            print(response)
+            response = model.process_query(request={"query": prompt})
             for key, value in response.items():
                 if not isinstance(value, dict):
-                    st.write(f"{key}: {value}")
+                    st.write(f"{key} {value}")
                 else:
                     for k, v in value.items():
-                        st.write(f"{k}: {v}")
+                        st.write(f"{k} {v}")
     message = {"role": "assistant", "content": response}
     st.session_state.messages.append(message)
