@@ -9,23 +9,15 @@ import json
 import os
 import logging
 from rebuff import Rebuff
-
-from typing import TYPE_CHECKING
-if TYPE_CHECKING:
-    from transformers import Pipeline
-
-
+from transformers import Pipeline
 
 class PromptInjectionDetector:
-
-    def __int__(self, config_path: str,
-                request: dict):
+    def __init__(self, config_path: str):
         self.config = json.load(open(config_path, 'r'))
-        self.request = request
         self.first_sanity_check_pipeline = self._model_default_factory()
 
-        # add as the env variable
-        os.environ['OPENAI_API_KEY'] = self.config['OPENAI_API_KEY']
+        # # add as the env variable
+        # os.environ['OPENAI_API_KEY'] = self.config['OPENAI_API_KEY']
 
     def _model_default_factory(self) -> Pipeline:
         try:
@@ -75,7 +67,7 @@ class PromptInjectionDetector:
             return {"label": "LEGIT", "return": False, "metrics_obtained": metrics_value}
 
 
-    def process_query(self):
+    def process_query(self, request):
         """
         Receives a query string and returns the response from the loaded LLM model.
 
@@ -87,6 +79,7 @@ class PromptInjectionDetector:
         """
 
         # first sanity test
+        self.request = request
         logging.info("First sanity check in progress!!")
         first_response = self.first_sanity_check_invoker()
 
@@ -118,19 +111,17 @@ class PromptInjectionDetector:
 
                 prompt = ChatPromptTemplate.from_template("Tell me a joke about {foo}")
                 model = ChatOpenAI(model_name="gpt-3.5-turbo",
-                                   openai_api_key=self.config['OPENAI_API_KEY'])
+                                   openai_api_key=self.config['OPENAI_API_KEY'],
+                                   temperature=0.7)
                 chain = prompt | model | StrOutputParser()
+                response = chain.invoke({"foo": f"{self.request['query']}"})
+
                 return {
-                    "answer": ,
-                    "sanity_check_from_which_step": "2",
+                    "answer": response.replace("\n", " "),
+                    "sanity_check_from_which_step": "3",
                     "metadata": {
-                        "metrics_obtained": second_response["metrics_obtained"],
-                        "label": second_response["label"]
+                        "metrics_obtained": "",
+                        "label": "Legit"
                     }
                 }
-                # llm_chain = LLMChain(
-                #     llm=llm,
-                #     prompt=PromptTemplate.from_template(prompt_template)
-                # )
-                # llm_chain(self.request["query"])
 
