@@ -105,7 +105,7 @@ class PromptInjectionDetector:
             check_llm=bool(self.config["REBUFF_SETTINGS"]["CHECK_LLM"]),
         )
         response = json.loads(response.model_dump_json())
-        median_score = statistics.median(
+        mean_score = statistics.mean(
             [
                 response["heuristicScore"],
                 response["modelScore"],
@@ -118,9 +118,8 @@ class PromptInjectionDetector:
             "heuristicScore": response["heuristicScore"],
             "modelScore": response["modelScore"],
             "vectorScore": response["vectorScore"]["topScore"],
-            "median_score": median_score,
+            "mean_score": mean_score,
         }
-        print(metrics_value)
         if injectionDetected:
             return {
                 "Input query is": "PROMPT INJECTION",
@@ -161,7 +160,11 @@ class PromptInjectionDetector:
         else:
             logging.info("First sanity passed. Moving to second sanity check!!")
             second_response = self.second_sanity_check_invoker()
-            if second_response["return"]:
+            if (
+                second_response["return"]
+                and second_response["Confidence level:"]["mean_score"]
+                > self.config["SECOND_SANITY_CHECK_THRESHOLD"]
+            ):
                 logging.info("Second sanity detected Injection")
                 return {
                     "AIResponse:": "Prompt Injection detected, please don't trick this model for unwanted results.",

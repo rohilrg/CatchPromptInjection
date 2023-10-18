@@ -4,7 +4,7 @@ from src.detector import PromptInjectionDetector
 
 # download model
 model = PromptInjectionDetector(config_path="src/config/config.json")
-st.title("Joke Maker")
+st.title("Your joke maker")
 
 # Initialize chat history
 # Store LLM generated responses
