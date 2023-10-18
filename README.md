@@ -3,6 +3,7 @@ This repo focus on how to deal with prompt injection problem faced by LLMs.
 
 ## Project in action
 To see the project in action here:
+
 ![Project in action](docs/CatchPromptInjection.gif)
 ### Structure
 ````bash
