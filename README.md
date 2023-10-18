@@ -61,6 +61,3 @@ Once the image is built please run the container using this command:
 docker run -p 8501:8501 <IMAGE_NAME_TO_GIVE>
 ````
 Once started the app is available at: http://localhost:8501
-
-## Background and report about this project
-The report about this project is available here: 
