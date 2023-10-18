@@ -1,5 +1,5 @@
 # CatchPromptInjection
-This repo focus on how to deal with prompt injection problem faced by LLMs.
+This repository is dedicated to addressing the prevalent challenge of prompt injection encountered by Language Model Models (LLMs). By providing insights, strategies, and solutions, we aim to equip developers and practitioners with effective approaches to mitigate and overcome prompt injection issues in the LLM domain. Explore the resources and knowledge shared here to enhance your understanding and effectively tackle prompt injection problems within LLMs. 
 
 ## Project in action
 To see the project in action here:
