@@ -5,10 +5,11 @@ FROM python:3.10.12-slim
 WORKDIR /app
 
 # Copy the current directory contents into the container at /app
-COPY . /app
-
+COPY requirement.txt /app/requirement.txt
 # Install necessary dependencies
 RUN pip install -r requirement.txt
+
+COPY . /app
 
 # Expose the port that the app will run on
 EXPOSE 8501

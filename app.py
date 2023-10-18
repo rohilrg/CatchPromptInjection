@@ -10,7 +10,7 @@ st.title("Your joke maker")
 # Store LLM generated responses
 if "messages" not in st.session_state.keys():
     st.session_state.messages = [
-        {"role": "assistant", "content": "Ask me to crack a joke about.."}
+        {"role": "assistant", "content": "Ask me to crack a joke about..."}
     ]
 
 # Display chat messages from history on app rerun

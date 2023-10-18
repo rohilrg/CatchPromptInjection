@@ -7,7 +7,7 @@ from langchain.chat_models import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from langchain.schema.output_parser import StrOutputParser
 
-
+logging.basicConfig(encoding='utf-8', level=logging.INFO)
 class PromptInjectionDetector:
     """
     Class to detect prompt injection using a two-step sanity check approach.
@@ -186,7 +186,7 @@ class PromptInjectionDetector:
                 response = chain.invoke({"foo": f"{self.request['query']}"})
                 return {
                     "AIResponse:": response.replace("\n", " "),
-                    "Sanity Check of input done by": "none of the methods.",
+                    "Sanity Check of input done by": "all methods and it was found legit.",
                     "metadata": {
                         "Confidence level:": "Not produced",
                         "Input query is": "LEGIT",
